@@ -12,7 +12,12 @@ const FestivalList = () => {
   useEffect(() => {
     const fetchFestivals = async () => {
       try {
-        const response = await axios.get('https://tamilnadu-college-fest-api.onrender.com/fests');
+        // Use the environment variable for the API URL
+        // console.log('start');
+        // const apiUrl = ;
+        // console.log('end');
+        // console.log(apiUrl);
+        const response = await axios.get(import.meta.env.VITE_API_URL);
         setFestivals(response.data.data);
       } catch (error) {
         console.error('Error fetching festival data:', error);
@@ -21,7 +26,7 @@ const FestivalList = () => {
 
     fetchFestivals();
   }, []);
-
+  
   const filteredFestivals = festivals.filter((fest) => {
     return fest.festName.toLowerCase().includes(searchName.toLowerCase()) &&
            fest.city.toLowerCase().includes(searchLocation.toLowerCase()) &&
@@ -33,7 +38,7 @@ const FestivalList = () => {
   return (
     <div className="bg-gray-100 p-4 font-sans">
       <h2 className="text-2xl font-bold mb-4 text-center sm:text-left">
-        List of latest college festivals happening in Tamil Nadu in 2024
+        Tamil Nadu College Fest
       </h2>
       <div className="flex flex-col sm:flex-row space-x-0 sm:space-x-4 mb-4">
         <input
@@ -51,14 +56,13 @@ const FestivalList = () => {
           <option value="">All</option>
           <option value="Entrepreneurship Summit">Entrepreneurship Summit</option>
           <option value="Conference">Conference</option>
-          <option value="workshop">workshop</option>
+          <option value="Workshop">Workshop</option>
           <option value="Technical">Technical</option>
           <option value="Symposium">Symposium</option>
           <option value="Hackathon">Hackathon</option>
           <option value="Guest Lectures">Guest Lectures</option>
           <option value="Cultural">Cultural</option>
           <option value="Seminar">Seminar</option>          
-          {/* Add more options as needed */}
         </select>
         <input
           type="text"
@@ -84,7 +88,7 @@ const FestivalList = () => {
       </div>
       <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filteredFestivals.map((fest, index) => (
-          <li key={fest.id} className="border rounded-lg p-4 shadow-lg bg-white">
+          <li key={index} className="border rounded-lg p-4 shadow-lg bg-white hover:bg-slate-100">
             <strong className="text-blue-600">{fest.festName}</strong>
             <p className="text-gray-600">
               <span className="font-semibold">Organiser:</span> {fest.CollegeName}
@@ -94,6 +98,10 @@ const FestivalList = () => {
               <span className="font-semibold">Venue:</span> {fest.city}
               <br />
               <span className="font-semibold">Start Date:</span> {fest.startDate}
+              <br />
+              <span className="font-semibold text-red-500 cursor-pointer">
+                <a href={fest.registerLink} target="_blank" rel="noopener noreferrer">Registration Link</a>
+              </span>
             </p>
           </li>
         ))}
